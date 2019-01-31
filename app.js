@@ -4,7 +4,8 @@ const os = require('os')
 const fs = require('fs')
 const app = express()
 const port = 3000
-const repo = 'https://github.com/zju-lambda/hexo-blog.git';
+const blog_repo = 'https://github.com/zju-lambda/hexo-blog.git';
+const slides_repo = 'https://github.com/zju-lambda/slides.git';
 
 function exec(cmd) {
     console.log('[Exec] ' + cmd)
@@ -12,11 +13,13 @@ function exec(cmd) {
 }
 
 function init() {
-    exec(`git clone ${repo}`);
+    exec(`git clone ${slides_repo}`);
+    exec(`git clone ${blog_repo}`);
     exec('cd hexo-blog && npm install && node node_modules/hexo/bin/hexo generate');
 }
 
 function update() {
+    exec('cd slides && git pull');
     exec('cd hexo-blog && git pull && npm install && node node_modules/hexo/bin/hexo generate');
 }
 
@@ -65,6 +68,7 @@ app.get('/[0-9]*/[0-9]*/[0-9]*/', function (req, res, next) {
 });
 
 app.use(express.static('hexo-blog/public'));
+app.use('/slides', express.static('slides'));
 
 app.post('/github', function (req, res) {
     update();
