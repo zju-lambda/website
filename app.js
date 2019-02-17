@@ -15,12 +15,12 @@ function exec(cmd) {
 function init() {
     exec(`git clone ${slides_repo}`);
     exec(`git clone ${blog_repo}`);
-    exec('cd hexo-blog && npm install && node node_modules/hexo/bin/hexo generate');
+    exec('cd hexo-blog && npm install && npm uninstall hexo-renderer-marked --save && npm install hexo-renderer-kramed --save && cp ../patch/inline.js node_modules/kramed/lib/rules && node node_modules/hexo/bin/hexo generate');
 }
 
 function update() {
     exec('cd slides && git pull');
-    exec('cd hexo-blog && git pull && npm install && node node_modules/hexo/bin/hexo generate');
+    exec('cd hexo-blog && git pull && npm install &&  && node node_modules/hexo/bin/hexo generate');
 }
 
 index = {};
